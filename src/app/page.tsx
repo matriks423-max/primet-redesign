@@ -3,9 +3,13 @@
 import Link from "next/link";
 import { Reveal, Stagger, StaggerItem, CountUp, Marquee, AnimatedBar, motion } from "@/components/motion";
 import { IconWrench, IconGear, IconDocument } from "@/components/Icons";
-import ParticleField from "@/components/ParticleField";
-import KineticText from "@/components/KineticText";
+import dynamic from "next/dynamic";
 import MagneticButton from "@/components/MagneticButton";
+
+// Client-only — these use browser APIs not available during SSR
+const ParticleField = dynamic(() => import("@/components/ParticleField"), { ssr: false });
+const KineticText = dynamic(() => import("@/components/KineticText"), { ssr: false });
+const HorizontalScroll = dynamic(() => import("@/components/HorizontalScroll"), { ssr: false });
 
 const SPECS = ["CNC Ražošana", "MIG/MAG Metināšana", "PLC Automatizācija", "Rezerves daļas"];
 
@@ -318,9 +322,10 @@ export default function HomePage() {
         />
       </div>
 
-      {/* ── SOLUTIONS ────────────────────────────────────────────────── */}
-      <section data-section="solutions" className="section-pad" style={{ background: "var(--color-stone)" }}>
-        <div className="container">
+      {/* ── SOLUTIONS — horizontal scroll ─────────────────────────────── */}
+      <div data-section="solutions" style={{ background: "var(--color-stone)" }}>
+        {/* Section header — not pinned */}
+        <div className="container" style={{ paddingTop: "5rem" }}>
           <Reveal style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "1.5rem", marginBottom: "3rem", paddingBottom: "1.5rem", borderBottom: "1px solid var(--color-border)" }}>
             <div>
               <p className="label" style={{ marginBottom: "0.75rem" }}>Risinājumi</p>
@@ -328,37 +333,71 @@ export default function HomePage() {
                 Pārtikas rūpniecības iekārtas katram procesam
               </h2>
             </div>
-            <Link href="/risinajumi" style={{ fontSize: "0.8125rem", fontWeight: 600, color: "var(--color-signal)", textDecoration: "none", letterSpacing: "0.04em", whiteSpace: "nowrap" }}>
-              Visas iekārtas →
-            </Link>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+              <span style={{ fontSize: "0.75rem", color: "var(--color-steel)", letterSpacing: "0.04em" }}>Ritiniet horizontāli →</span>
+              <Link href="/risinajumi" style={{ fontSize: "0.8125rem", fontWeight: 600, color: "var(--color-signal)", textDecoration: "none", letterSpacing: "0.04em", whiteSpace: "nowrap" }}>
+                Visas iekārtas
+              </Link>
+            </div>
           </Reveal>
-
-          {/* CSS hover via card-hover class — not Framer Motion ✓ */}
-          <Stagger style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1px", background: "var(--color-border)" }}>
-            {SOLUTIONS.map((s) => (
-              <StaggerItem key={s.code}>
-                <div
-                  className="solution-card"
-                  style={{ background: "var(--color-stone)", padding: "2rem", display: "flex", flexDirection: "column", gap: "1rem", height: "100%", border: "1px solid transparent", cursor: "pointer" }}
-                >
-                  <span className="card-code" style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.1em", color: "var(--color-signal)" }}>{s.code}</span>
-                  <h3 style={{ fontSize: "var(--fs-h4)", fontWeight: 700, letterSpacing: "-0.01em" }}>{s.title}</h3>
-                  <p style={{ fontSize: "var(--fs-small)", color: "var(--color-steel)", lineHeight: 1.6, flex: 1 }}>{s.desc}</p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-                    {s.tags.map((t) => (
-                      <span key={t} style={{ fontSize: "0.7rem", fontWeight: 500, padding: "3px 8px", background: "var(--color-warm)", color: "var(--color-steel)", letterSpacing: "0.03em" }}>{t}</span>
-                    ))}
-                  </div>
-                  <span className="card-arrow">
-                    Skatīt risinājumu
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                  </span>
-                </div>
-              </StaggerItem>
-            ))}
-          </Stagger>
         </div>
-      </section>
+
+        {/* Pinned horizontal scroll track */}
+        <HorizontalScroll speed={1.1}>
+          {/* Intro card */}
+          <div style={{ width: "min(320px, 90vw)", flexShrink: 0, padding: "2.5rem 3rem 2.5rem 2rem", display: "flex", flexDirection: "column", justifyContent: "flex-end", minHeight: "60vh", background: "var(--color-navy)", position: "relative", overflow: "hidden" }}>
+            <div aria-hidden="true" style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+            <div style={{ position: "absolute", top: 0, left: 0, width: "3px", height: "100%", background: "var(--color-signal)" }} />
+            <p style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--color-signal)", marginBottom: "1rem", position: "relative" }}>06 risinājumi</p>
+            <p style={{ fontSize: "1.125rem", fontWeight: 600, color: "rgba(255,255,255,0.7)", lineHeight: 1.5, position: "relative" }}>
+              No gaļas apstrādes līdz dzērienu pildīšanai — iekārtas katram pārtikas ražošanas procesam.
+            </p>
+          </div>
+
+          {/* Solution cards */}
+          {SOLUTIONS.map((s, i) => (
+            <div
+              key={s.code}
+              className="solution-card"
+              style={{
+                width: "min(380px, 88vw)",
+                flexShrink: 0,
+                background: i % 2 === 0 ? "var(--color-stone)" : "var(--color-warm)",
+                padding: "3rem 2.5rem",
+                display: "flex",
+                flexDirection: "column",
+                gap: "1.25rem",
+                minHeight: "60vh",
+                border: "1px solid transparent",
+                cursor: "pointer",
+                borderLeft: "1px solid var(--color-border)",
+              }}
+            >
+              <span className="card-code" style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.1em", color: "var(--color-signal)" }}>{s.code}</span>
+              <h3 style={{ fontSize: "var(--fs-h3)", fontWeight: 700, letterSpacing: "-0.02em", lineHeight: 1.15 }}>{s.title}</h3>
+              <p style={{ fontSize: "var(--fs-small)", color: "var(--color-steel)", lineHeight: 1.7, flex: 1 }}>{s.desc}</p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                {s.tags.map((t) => (
+                  <span key={t} style={{ fontSize: "0.7rem", fontWeight: 500, padding: "4px 10px", background: "rgba(0,0,0,0.05)", color: "var(--color-steel)", letterSpacing: "0.03em" }}>{t}</span>
+                ))}
+              </div>
+              <span className="card-arrow" style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "0.75rem", fontWeight: 600, color: "var(--color-signal)", letterSpacing: "0.04em" }}>
+                Skatīt risinājumu
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </span>
+            </div>
+          ))}
+
+          {/* CTA end card */}
+          <div style={{ width: "min(320px, 90vw)", flexShrink: 0, padding: "3rem 2.5rem", display: "flex", flexDirection: "column", justifyContent: "center", gap: "1.5rem", minHeight: "60vh", background: "var(--color-signal)", borderLeft: "1px solid rgba(255,255,255,0.15)" }}>
+            <p style={{ fontSize: "1.25rem", fontWeight: 700, color: "var(--color-white)", lineHeight: 1.3, letterSpacing: "-0.01em" }}>Nav atrasts piemērots risinājums?</p>
+            <p style={{ fontSize: "0.875rem", color: "rgba(255,255,255,0.75)", lineHeight: 1.6 }}>Mēs projektējam pielāgotas iekārtu līnijas pēc jūsu specifikācijām.</p>
+            <MagneticButton href="/kontakti" style={{ display: "inline-flex", alignItems: "center", padding: "0.75rem 1.5rem", background: "var(--color-white)", color: "var(--color-signal)", fontSize: "0.8125rem", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", textDecoration: "none", width: "fit-content" }}>
+              Sazināties →
+            </MagneticButton>
+          </div>
+        </HorizontalScroll>
+      </div>
 
       {/* ── ABOUT TEASER ─────────────────────────────────────────────── */}
       <section data-section="about" className="section-pad" style={{ background: "var(--color-warm)" }}>

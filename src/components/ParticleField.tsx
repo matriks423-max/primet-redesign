@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -25,6 +25,16 @@ function Particles({ count = 700 }: { count?: number }) {
   }, [count, viewport.width, viewport.height]);
 
   const mouse = useRef({ x: 0, y: 0 });
+
+  // Mouse tracking — in effect, not render body
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      mouse.current.x = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouse.current.y = -(e.clientY / window.innerHeight - 0.5) * 2;
+    };
+    window.addEventListener("mousemove", handler);
+    return () => window.removeEventListener("mousemove", handler);
+  }, []);
 
   // Update on every frame
   useFrame(({ clock }) => {
@@ -52,14 +62,6 @@ function Particles({ count = 700 }: { count?: number }) {
     mesh.current.rotation.x += (mouse.current.y * 0.0003 - mesh.current.rotation.x) * 0.05;
     mesh.current.rotation.y += (mouse.current.x * 0.0003 - mesh.current.rotation.y) * 0.05;
   });
-
-  // Track mouse
-  if (typeof window !== "undefined") {
-    window.onmousemove = (e) => {
-      mouse.current.x = (e.clientX / window.innerWidth - 0.5) * 2;
-      mouse.current.y = -(e.clientY / window.innerHeight - 0.5) * 2;
-    };
-  }
 
   return (
     <points ref={mesh}>
