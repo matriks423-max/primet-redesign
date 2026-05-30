@@ -18,14 +18,9 @@ export default function PageTransition({ children }: { children: React.ReactNode
     const panel = panelRef.current;
     if (!panel) return;
 
-    // Skip wipe on very first load — just reveal
+    // Skip wipe on very first load — panel starts at scaleX(0) via CSS, nothing to animate
     if (isFirst.current) {
       isFirst.current = false;
-      gsap.fromTo(
-        panel,
-        { scaleX: 1, transformOrigin: "right" },
-        { scaleX: 0, duration: 0.55, ease: "power3.inOut", delay: 0.05 }
-      );
       return;
     }
 

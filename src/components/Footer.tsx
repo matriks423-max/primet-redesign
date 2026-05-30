@@ -85,7 +85,7 @@ export default function Footer() {
               </p>
               <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                 {links.map(({ href, label }) => (
-                  <li key={href}>
+                  <li key={label}>
                     <Link
                       href={href}
                       style={{

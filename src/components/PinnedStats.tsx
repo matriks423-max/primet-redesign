@@ -55,14 +55,27 @@ export default function PinnedStats() {
 
     const ctx = gsap.context(() => {
       // First panel visible, rest stacked absolutely at opacity 0
+      // NOTE: GSAP set() does not accept "inset" — use explicit top/right/bottom/left
       items.forEach((panel, i) => {
-        gsap.set(panel, {
-          opacity:  i === 0 ? 1 : 0,
-          position: i === 0 ? "relative" : "absolute",
-          inset:    i === 0 ? "auto"      : 0,
-          zIndex:   FACTS.length - i,
-          display:  "flex",
-        });
+        if (i === 0) {
+          gsap.set(panel, {
+            opacity:  1,
+            position: "relative",
+            zIndex:   FACTS.length,
+            display:  "flex",
+          });
+        } else {
+          gsap.set(panel, {
+            opacity:  0,
+            position: "absolute",
+            top:      0,
+            right:    0,
+            bottom:   0,
+            left:     0,
+            zIndex:   FACTS.length - i,
+            display:  "flex",
+          });
+        }
       });
 
       const tl = gsap.timeline({

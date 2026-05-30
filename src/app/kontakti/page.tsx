@@ -322,7 +322,7 @@ export default function KontaktiPage() {
                       />
                       Piekrītu personas datu apstrādei saskaņā ar{" "}
                       <a
-                        href="/privatuma-politika"
+                        href="#"
                         style={{ color: "var(--color-signal)", textDecoration: "none" }}
                       >
                         privātuma politiku

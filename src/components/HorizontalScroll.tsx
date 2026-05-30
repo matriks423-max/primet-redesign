@@ -56,9 +56,11 @@ export default function HorizontalScroll({ children, speed = 1 }: HorizontalScro
     setOuterHeight();
     ScrollTrigger.refresh();
 
-    window.addEventListener("resize", () => ScrollTrigger.refresh(), { passive: true });
+    const onResize = () => ScrollTrigger.refresh();
+    window.addEventListener("resize", onResize, { passive: true });
 
     return () => {
+      window.removeEventListener("resize", onResize);
       ctx.revert();
     };
   }, [speed]);
