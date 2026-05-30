@@ -1,26 +1,273 @@
 @import "tailwindcss";
 
+/* ─── Design Tokens ─────────────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Palette — OKLCH */
+  --color-stone:        oklch(98.5% 0.005 95);   /* #FAFAF8 — page ground */
+  --color-ink:          oklch(12% 0 0);           /* #111111 — body text   */
+  --color-navy:         oklch(14% 0.04 255);      /* #0A1628 — hero bg     */
+  --color-signal:       oklch(46% 0.19 28);       /* #CC3300 — accent/CTA  */
+  --color-signal-hover: oklch(40% 0.19 28);       /* #B02B00 — hover       */
+  --color-steel:        oklch(52% 0.01 255);      /* #6B7280 — muted text  */
+  --color-warm:         oklch(94% 0.01 85);       /* #F0EFE9 — card bg     */
+  --color-white:        oklch(100% 0 0);
+  --color-border:       oklch(88% 0.005 85);      /* hairline dividers     */
+
+  /* Type scale — perfect fourth (1.333) */
+  --fs-display: 4rem;      /* 64px */
+  --fs-h1:      3rem;      /* 48px */
+  --fs-h2:      2.25rem;   /* 36px */
+  --fs-h3:      1.5rem;    /* 24px */
+  --fs-h4:      1.25rem;   /* 20px */
+  --fs-base:    1rem;      /* 16px */
+  --fs-small:   0.875rem;  /* 14px */
+  --fs-label:   0.75rem;   /* 12px */
+
+  --lh-tight:   1.1;
+  --lh-heading: 1.2;
+  --lh-body:    1.65;
+
+  /* Spacing */
+  --section-pad: 5rem;     /* 80px desktop */
+  --grid-gap:    1.5rem;   /* 24px */
+
+  /* Motion — custom ease-out curve */
+  --ease-out:   cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-io:    cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* Radius — industrial zero-radius */
+  --radius:     0px;
 }
 
+/* ─── Tailwind theme bridge ─────────────────────────────────────────────── */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-stone:        var(--color-stone);
+  --color-ink:          var(--color-ink);
+  --color-navy:         var(--color-navy);
+  --color-signal:       var(--color-signal);
+  --color-steel:        var(--color-steel);
+  --color-warm:         var(--color-warm);
+  --color-white:        var(--color-white);
+  --color-border:       var(--color-border);
+  --font-sans:          var(--font-inter), system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─── Base ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-stone);
+  color: var(--color-ink);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: var(--fs-base);
+  line-height: var(--lh-body);
+}
+
+/* ─── Typography ─────────────────────────────────────────────────────────── */
+h1, h2, h3, h4, h5 {
+  line-height: var(--lh-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ─── Focus ring ─────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 3px;
+}
+
+/* ─── Button primitives ─────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out);
+  text-decoration: none;
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+  background-color: var(--color-signal);
+  color: var(--color-white);
+}
+
+.btn-primary:hover { background-color: var(--color-signal-hover); }
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-white);
+  border: 1.5px solid rgba(255,255,255,0.4);
+}
+
+.btn-outline:hover { border-color: var(--color-white); }
+
+.btn-outline-dark {
+  background-color: transparent;
+  color: var(--color-ink);
+  border: 1.5px solid var(--color-ink);
+}
+
+.btn-outline-dark:hover {
+  background-color: var(--color-ink);
+  color: var(--color-white);
+}
+
+/* ─── Section wrapper ──────────────────────────────────────────────────── */
+.section-pad {
+  padding-top: var(--section-pad);
+  padding-bottom: var(--section-pad);
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* ─── Label / eyebrow ──────────────────────────────────────────────────── */
+.label {
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-signal);
+}
+
+/* ─── Card hover — CSS only, guarded for touch devices ─────────────────── */
+/* Emil: hover states in CSS (off main thread), not Framer Motion           */
+@media (hover: hover) and (pointer: fine) {
+  .card-hover {
+    transition:
+      border-color 200ms ease,
+      box-shadow 200ms ease,
+      background-color 180ms ease;
+  }
+
+  .card-hover:hover {
+    border-color: var(--color-signal) !important;
+  }
+
+  .card-hover-bg:hover {
+    background-color: var(--color-warm) !important;
+  }
+
+  .service-card {
+    border-top: 3px solid transparent;
+    transition: border-top-color 200ms ease;
+  }
+
+  .service-card:hover {
+    border-top-color: var(--color-signal);
+  }
+}
+
+/* ─── Horizontal rule ─────────────────────────────────────────────────── */
+hr.divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+}
+
+/* ─── Marquee — CSS-only, fully GPU composited ─────────────────────────── */
+/* translateX is a transform — runs off main thread ✓                       */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.marquee-inner {
+  display: flex;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+
+.marquee-inner:hover {
+  animation-play-state: paused;
+}
+
+/* ─── Live status dot — pulse via transform+opacity only ─────────────────── */
+@keyframes pulse-ring {
+  0%   { transform: scale(1);   opacity: 0.6; }
+  70%  { transform: scale(2.4); opacity: 0;   }
+  100% { transform: scale(2.4); opacity: 0;   }
+}
+
+.live-dot {
+  position: relative;
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: oklch(62% 0.19 145);
+  flex-shrink: 0;
+}
+
+.live-dot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: oklch(62% 0.19 145);
+  animation: pulse-ring 2.2s ease-out infinite;
+}
+
+/* ─── Number value — tabular figures ────────────────────────────────────── */
+.stat-value {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* ─── Placeholder (map / image) ─────────────────────────────────────────── */
+.placeholder-block {
+  background-color: var(--color-warm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-steel);
+  font-size: var(--fs-small);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Mobile nav overlay ─────────────────────────────────────────────────── */
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--color-navy);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 280ms var(--ease-out);
+}
+
+.nav-overlay.open {
+  opacity: 1;
+  pointer-events: all;
 }
