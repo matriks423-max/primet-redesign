@@ -1,7 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { HeroText, Reveal, Stagger, StaggerItem, CountUp, Marquee, AnimatedBar, motion } from "@/components/motion";
+import { Reveal, Stagger, StaggerItem, CountUp, Marquee, AnimatedBar, motion } from "@/components/motion";
+import { IconWrench, IconGear, IconDocument } from "@/components/Icons";
+import ParticleField from "@/components/ParticleField";
+import KineticText from "@/components/KineticText";
+import MagneticButton from "@/components/MagneticButton";
 
 const SPECS = ["CNC Ražošana", "MIG/MAG Metināšana", "PLC Automatizācija", "Rezerves daļas"];
 
@@ -29,9 +33,9 @@ const PROOF = [
 ];
 
 const SERVICES = [
-  { icon: "🔧", title: "Uzstādīšana", desc: "Iekārtu piegāde, montāža un nodošana ekspluatācijā ar pilnu dokumentāciju." },
-  { icon: "⚙️", title: "Apkope un remontdarbi", desc: "Plānota apkope, avārijas remontdarbi un rezerves daļu piegāde 48 stundu laikā." },
-  { icon: "📋", title: "Konsultācijas", desc: "Ražošanas līniju projektēšana un modernizācija ar pilnu tehnisko atbalstu." },
+  { Icon: IconWrench, title: "Uzstādīšana", desc: "Iekārtu piegāde, montāža un nodošana ekspluatācijā ar pilnu dokumentāciju." },
+  { Icon: IconGear, title: "Apkope un remontdarbi", desc: "Plānota apkope, avārijas remontdarbi un rezerves daļu piegāde 48 stundu laikā." },
+  { Icon: IconDocument, title: "Konsultācijas", desc: "Ražošanas līniju projektēšana un modernizācija ar pilnu tehnisko atbalstu." },
 ];
 
 export default function HomePage() {
@@ -40,6 +44,7 @@ export default function HomePage() {
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section
         data-section="hero"
+        className="noise"
         style={{
           background: "var(--color-navy)",
           minHeight: "100vh",
@@ -51,38 +56,44 @@ export default function HomePage() {
           overflow: "hidden",
         }}
       >
+        {/* Three.js particle field — absolute fill behind content */}
+        <ParticleField />
+
+        {/* Subtle grid — behind particles */}
         <div
           aria-hidden="true"
           style={{
             position: "absolute",
             inset: 0,
             backgroundImage: [
-              "linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)",
-              "linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)",
+              "linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px)",
+              "linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px)",
             ].join(","),
             backgroundSize: "80px 80px",
             pointerEvents: "none",
+            zIndex: 1,
           }}
         />
 
-        {/* Signal accent line — scaleX is a transform, hardware-accelerated ✓ */}
+        {/* Bottom signal line */}
         <motion.div
           aria-hidden="true"
           initial={{ transform: "scaleX(0)" }}
           animate={{ transform: "scaleX(1)" }}
-          transition={{ duration: 1.2, ease: [0.23, 1, 0.32, 1], delay: 0.8 }}
+          transition={{ duration: 1.4, ease: [0.23, 1, 0.32, 1], delay: 1 }}
           style={{
             position: "absolute",
             bottom: 0,
             left: 0,
             right: 0,
             height: "3px",
-            background: "var(--color-signal)",
+            background: "linear-gradient(90deg, var(--color-signal), oklch(46% 0.19 28) 60%, transparent)",
             transformOrigin: "left",
+            zIndex: 2,
           }}
         />
 
-        <div className="container" style={{ position: "relative" }}>
+        <div className="container" style={{ position: "relative", zIndex: 3 }}>
           <div
             style={{
               display: "grid",
@@ -93,88 +104,101 @@ export default function HomePage() {
           >
             {/* Left copy */}
             <div>
-              {/* Overline — full transform string, hardware-accelerated ✓ */}
+              {/* Overline */}
               <motion.div
-                initial={{ opacity: 0, transform: "translateX(-12px)" }}
+                initial={{ opacity: 0, transform: "translateX(-16px)" }}
                 animate={{ opacity: 1, transform: "translateX(0px)" }}
-                transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1], delay: 0.1 }}
-                style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "1.5rem" }}
+                transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1], delay: 0.15 }}
+                style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "1.75rem" }}
               >
-                <span style={{ display: "block", width: "24px", height: "2px", background: "var(--color-signal)" }} />
-                <span style={{ fontSize: "0.6875rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--color-signal)" }}>
+                <span style={{ display: "block", width: "32px", height: "1.5px", background: "var(--color-signal)" }} />
+                <span style={{ fontSize: "0.6875rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--color-signal)" }}>
                   Pārtikas rūpniecības iekārtas
                 </span>
               </motion.div>
 
-              {/* Headline — HeroText uses transform string internally ✓ */}
-              <HeroText
-                lines={["Ražošanas iekārtas,", "kas darbojas."]}
+              {/* Kinetic headline — char by char */}
+              <KineticText
+                text="Ražošanas iekārtas,"
+                tag="h1"
+                delay={0.3}
+                splitBy="chars"
                 style={{
-                  fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                  fontSize: "clamp(2.75rem, 5.5vw, 4.5rem)",
                   fontWeight: 800,
-                  letterSpacing: "-0.03em",
-                  lineHeight: 1.05,
+                  letterSpacing: "-0.035em",
+                  lineHeight: 1.0,
                   color: "var(--color-white)",
-                  marginBottom: "1.5rem",
+                  display: "block",
+                  marginBottom: "0.1em",
+                }}
+              />
+              <KineticText
+                text="kas darbojas."
+                tag="h1"
+                delay={0.5}
+                splitBy="chars"
+                style={{
+                  fontSize: "clamp(2.75rem, 5.5vw, 4.5rem)",
+                  fontWeight: 800,
+                  letterSpacing: "-0.035em",
+                  lineHeight: 1.0,
+                  color: "var(--color-signal)",
+                  display: "block",
+                  marginBottom: "1.75rem",
                 }}
               />
 
-              {/* Sub — full transform ✓ */}
+              {/* Sub */}
               <motion.p
-                initial={{ opacity: 0, transform: "translateY(12px)" }}
+                initial={{ opacity: 0, transform: "translateY(16px)" }}
                 animate={{ opacity: 1, transform: "translateY(0px)" }}
-                transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1], delay: 0.5 }}
-                style={{ fontSize: "1.125rem", color: "oklch(72% 0.01 255)", lineHeight: 1.6, maxWidth: "44ch", marginBottom: "2rem" }}
+                transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1], delay: 0.85 }}
+                style={{ fontSize: "1.125rem", color: "oklch(68% 0.01 255)", lineHeight: 1.65, maxWidth: "42ch", marginBottom: "2rem" }}
               >
                 SIA Primet — piegāde, uzstādīšana un serviss pārtikas pārstrādes uzņēmumiem Latvijā un visā Baltijā.
               </motion.p>
 
-              {/* Spec pills — full transform ✓ */}
+              {/* Spec pills */}
               <motion.div
-                initial={{ opacity: 0, transform: "translateY(8px)" }}
+                initial={{ opacity: 0, transform: "translateY(10px)" }}
                 animate={{ opacity: 1, transform: "translateY(0px)" }}
-                transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1], delay: 0.6 }}
-                style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "2rem" }}
+                transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1], delay: 1.0 }}
+                style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "2.25rem" }}
               >
                 {SPECS.map((s) => (
-                  <span key={s} style={{ fontSize: "0.75rem", fontWeight: 500, color: "oklch(60% 0.01 255)", padding: "5px 12px", border: "1px solid rgba(255,255,255,0.11)", letterSpacing: "0.03em" }}>
+                  <span key={s} style={{ fontSize: "0.7rem", fontWeight: 500, color: "oklch(55% 0.01 255)", padding: "5px 12px", border: "1px solid rgba(255,255,255,0.09)", letterSpacing: "0.04em" }}>
                     {s}
                   </span>
                 ))}
               </motion.div>
 
-              {/* CTAs — full transform ✓ */}
+              {/* Magnetic CTAs */}
               <motion.div
-                initial={{ opacity: 0, transform: "translateY(8px)" }}
+                initial={{ opacity: 0, transform: "translateY(10px)" }}
                 animate={{ opacity: 1, transform: "translateY(0px)" }}
-                transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1], delay: 0.7 }}
-                style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap", marginBottom: "2.5rem" }}
+                transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1], delay: 1.1 }}
+                style={{ display: "flex", alignItems: "center", gap: "1.25rem", flexWrap: "wrap", marginBottom: "2.75rem" }}
               >
-                {/* whileTap on the <a> directly — not on a wrapper div ✓ */}
-                <motion.a
-                  href="/kontakti"
-                  className="btn btn-primary"
-                  whileTap={{ transform: "scale(0.97)" }}
-                  transition={{ duration: 0.16, ease: [0.23, 1, 0.32, 1] }}
-                >
+                <MagneticButton href="/kontakti" className="btn btn-primary">
                   Pieprasīt piedāvājumu
-                </motion.a>
-                <Link href="/risinajumi" style={{ fontSize: "0.875rem", fontWeight: 600, color: "var(--color-white)", textDecoration: "none", letterSpacing: "0.02em", borderBottom: "1px solid rgba(255,255,255,0.3)", paddingBottom: "2px" }}>
+                </MagneticButton>
+                <Link href="/risinajumi" style={{ fontSize: "0.875rem", fontWeight: 600, color: "rgba(255,255,255,0.7)", textDecoration: "none", letterSpacing: "0.02em", borderBottom: "1px solid rgba(255,255,255,0.2)", paddingBottom: "2px", transition: "color 200ms, border-color 200ms" }}>
                   Skatīt risinājumus →
                 </Link>
               </motion.div>
 
-              {/* Trust strip */}
+              {/* Stats strip */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.9 }}
-                style={{ paddingTop: "2rem", borderTop: "1px solid rgba(255,255,255,0.09)", display: "flex", gap: "clamp(1.5rem, 5vw, 3.5rem)", flexWrap: "wrap" }}
+                transition={{ duration: 0.8, delay: 1.3 }}
+                style={{ paddingTop: "2rem", borderTop: "1px solid rgba(255,255,255,0.07)", display: "flex", gap: "clamp(1.5rem, 5vw, 3.5rem)", flexWrap: "wrap" }}
               >
                 {STATS.map(({ value, suffix, label }) => (
                   <div key={label} style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
-                    <span style={{ fontSize: "0.625rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(38% 0.02 255)" }}>{label}</span>
-                    <span style={{ fontSize: "0.875rem", fontWeight: 500, color: "oklch(76% 0.01 255)" }}>
+                    <span style={{ fontSize: "0.625rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(35% 0.02 255)" }}>{label}</span>
+                    <span style={{ fontSize: "1rem", fontWeight: 700, color: "var(--color-white)", fontVariantNumeric: "tabular-nums" }}>
                       <CountUp value={value} suffix={suffix} />
                     </span>
                   </div>
@@ -182,15 +206,14 @@ export default function HomePage() {
               </motion.div>
             </div>
 
-            {/* Right panel — animated industrial spec display */}
+            {/* Right panel — HMI spec display */}
             <motion.div
-              initial={{ opacity: 0, transform: "translateY(20px)" }}
+              initial={{ opacity: 0, transform: "translateY(24px)" }}
               animate={{ opacity: 1, transform: "translateY(0px)" }}
-              transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1], delay: 0.35 }}
+              transition={{ duration: 0.9, ease: [0.23, 1, 0.32, 1], delay: 0.5 }}
               style={{ display: "flex", flexDirection: "column", gap: "0" }}
-              className="hidden md:flex"
+              className="desktop-spec"
             >
-              {/* HMI header */}
               <div style={{ background: "oklch(17% 0.05 255)", border: "1px solid rgba(255,255,255,0.07)", borderBottom: "none", padding: "0.875rem 1.25rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                   <span className="live-dot" aria-hidden="true" />
@@ -198,25 +221,21 @@ export default function HomePage() {
                 </div>
                 <span style={{ fontSize: "0.625rem", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(38% 0.01 255)" }}>WF-200 Pro · Gaļas līnija</span>
               </div>
-
-              {/* Spec bars */}
               <div style={{ background: "oklch(15% 0.04 255)", border: "1px solid rgba(255,255,255,0.07)", padding: "1.5rem 1.25rem", display: "flex", flexDirection: "column", gap: "1.125rem" }}>
                 {[
                   { label: "Kapacitāte",   value: 0.84, display: "200 kg/h" },
                   { label: "Efektivitāte", value: 0.91, display: "91%"      },
-                  { label: "Dīkstāves",    value: 0.06, display: "< 2%",   color: "oklch(62% 0.19 145)" },
+                  { label: "Dīkstāves",    value: 0.06, display: "< 2%", color: "oklch(62% 0.19 145)" },
                 ].map(({ label, value, display, color }, i) => (
                   <div key={label} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
                       <span style={{ fontSize: "0.6875rem", fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase", color: "oklch(46% 0.01 255)" }}>{label}</span>
-                      <span style={{ fontSize: "0.8125rem", fontWeight: 700, fontVariantNumeric: "tabular-nums", color: "var(--color-white)", letterSpacing: "-0.01em" }}>{display}</span>
+                      <span style={{ fontSize: "0.8125rem", fontWeight: 700, fontVariantNumeric: "tabular-nums", color: "var(--color-white)" }}>{display}</span>
                     </div>
-                    <AnimatedBar value={value} delay={0.5 + i * 0.12} color={color} />
+                    <AnimatedBar value={value} delay={0.6 + i * 0.12} color={color} />
                   </div>
                 ))}
               </div>
-
-              {/* Cert badge strip */}
               <div style={{ background: "oklch(13% 0.04 255)", border: "1px solid rgba(255,255,255,0.07)", borderTop: "none", padding: "0.875rem 1.25rem", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0.5rem" }}>
                 {["ISO 9001", "CE", "HACCP", "IP66"].map((cert) => (
                   <div key={cert} style={{ textAlign: "center", padding: "0.5rem 0.25rem", border: "1px solid rgba(255,255,255,0.07)" }}>
@@ -224,8 +243,6 @@ export default function HomePage() {
                   </div>
                 ))}
               </div>
-
-              {/* Grid of tech specs */}
               <div style={{ marginTop: "1rem", background: "oklch(16% 0.04 255)", border: "1px solid rgba(255,255,255,0.06)", padding: "1.25rem", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                 {[["500–5000 l/h", "Kapacitātes diapazons"], ["AISI 316L", "Tērauda klase"], ["IP67", "Aizsardzības pakāpe"], ["48h", "Servisa reakcija"]].map(([v, u]) => (
                   <div key={u} style={{ borderLeft: "2px solid rgba(255,255,255,0.06)", paddingLeft: "0.75rem" }}>
@@ -240,7 +257,7 @@ export default function HomePage() {
       </section>
 
       {/* ── PROOF STRIP ──────────────────────────────────────────────── */}
-      <section data-section="proof" style={{ background: "var(--color-ink)", padding: "3rem 0" }}>
+      <section data-section="proof" className="noise" style={{ background: "var(--color-ink)", padding: "3rem 0" }}>
         <div className="container">
           <Stagger style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))" }}>
             {PROOF.map(({ value, label }, i) => (
@@ -321,10 +338,10 @@ export default function HomePage() {
             {SOLUTIONS.map((s) => (
               <StaggerItem key={s.code}>
                 <div
-                  className="card-hover"
+                  className="solution-card"
                   style={{ background: "var(--color-stone)", padding: "2rem", display: "flex", flexDirection: "column", gap: "1rem", height: "100%", border: "1px solid transparent", cursor: "pointer" }}
                 >
-                  <span style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.1em", color: "var(--color-signal)" }}>{s.code}</span>
+                  <span className="card-code" style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.1em", color: "var(--color-signal)" }}>{s.code}</span>
                   <h3 style={{ fontSize: "var(--fs-h4)", fontWeight: 700, letterSpacing: "-0.01em" }}>{s.title}</h3>
                   <p style={{ fontSize: "var(--fs-small)", color: "var(--color-steel)", lineHeight: 1.6, flex: 1 }}>{s.desc}</p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
@@ -332,6 +349,10 @@ export default function HomePage() {
                       <span key={t} style={{ fontSize: "0.7rem", fontWeight: 500, padding: "3px 8px", background: "var(--color-warm)", color: "var(--color-steel)", letterSpacing: "0.03em" }}>{t}</span>
                     ))}
                   </div>
+                  <span className="card-arrow">
+                    Skatīt risinājumu
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  </span>
                 </div>
               </StaggerItem>
             ))}
@@ -388,10 +409,12 @@ export default function HomePage() {
 
           {/* CSS hover via service-card class — not JS event handlers ✓ */}
           <Stagger style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1px", background: "var(--color-border)" }}>
-            {SERVICES.map(({ icon, title, desc }) => (
+            {SERVICES.map(({ Icon, title, desc }) => (
               <StaggerItem key={title}>
                 <div className="service-card" style={{ background: "var(--color-stone)", padding: "2.5rem 2rem" }}>
-                  <span style={{ fontSize: "1.75rem", marginBottom: "1.25rem", display: "block" }}>{icon}</span>
+                  <span style={{ marginBottom: "1.5rem", display: "block", color: "var(--color-signal)" }}>
+                    <Icon size={28} />
+                  </span>
                   <h3 style={{ fontSize: "var(--fs-h4)", fontWeight: 700, letterSpacing: "-0.01em", marginBottom: "0.75rem" }}>{title}</h3>
                   <p style={{ fontSize: "0.875rem", color: "var(--color-steel)", lineHeight: 1.65 }}>{desc}</p>
                 </div>
@@ -408,7 +431,7 @@ export default function HomePage() {
       </section>
 
       {/* ── CTA BAND ─────────────────────────────────────────────────── */}
-      <section data-section="cta" style={{ background: "var(--color-signal)", padding: "5rem 0" }}>
+      <section data-section="cta" className="noise" style={{ background: "var(--color-signal)", padding: "5rem 0" }}>
         <div className="container">
           <Reveal style={{ display: "flex", flexWrap: "wrap", gap: "2rem", alignItems: "center", justifyContent: "space-between" }}>
             <div>

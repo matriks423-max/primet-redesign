@@ -371,16 +371,9 @@ export default function ServisaPage() {
                           color: s.highlight ? "rgba(255,255,255,0.8)" : "var(--color-ink)",
                         }}
                       >
-                        <span
-                          style={{
-                            color: "var(--color-signal)",
-                            fontWeight: 700,
-                            marginTop: "1px",
-                            flexShrink: 0,
-                          }}
-                        >
-                          ✓
-                        </span>
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" style={{ flexShrink: 0, marginTop: "2px" }}>
+                          <polyline points="2,7 5.5,10.5 12,3.5" stroke="var(--color-signal)" strokeWidth="1.5" strokeLinecap="square" strokeLinejoin="miter"/>
+                        </svg>
                         {f}
                       </li>
                     ))}
@@ -592,9 +585,9 @@ export default function ServisaPage() {
                           color: p.featured ? "rgba(255,255,255,0.8)" : "var(--color-ink)",
                         }}
                       >
-                        <span style={{ color: "var(--color-signal)", fontWeight: 700, flexShrink: 0 }}>
-                          ✓
-                        </span>
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" style={{ flexShrink: 0, marginTop: "2px" }}>
+                          <polyline points="2,7 5.5,10.5 12,3.5" stroke="var(--color-signal)" strokeWidth="1.5" strokeLinecap="square" strokeLinejoin="miter"/>
+                        </svg>
                         {f}
                       </li>
                     ))}

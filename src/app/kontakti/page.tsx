@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Reveal, Stagger, StaggerItem, motion } from "@/components/motion";
+import { IconPhone, IconMail, IconMessageSquare } from "@/components/Icons";
 
 const SUBJECTS = [
   "Iekārtu piegāde",
@@ -17,19 +18,19 @@ const CONTACT_INFO = [
     label: "Tālrunis",
     value: "+371 XX XXX XXX",
     href: "tel:+37100000000",
-    icon: "📞",
+    Icon: IconPhone,
   },
   {
     label: "WhatsApp",
     value: "+371 XX XXX XXX",
     href: "https://wa.me/37100000000",
-    icon: "💬",
+    Icon: IconMessageSquare,
   },
   {
     label: "E-pasts",
     value: "info@primet.lv",
     href: "mailto:info@primet.lv",
-    icon: "✉️",
+    Icon: IconMail,
   },
 ];
 
@@ -138,13 +139,11 @@ export default function KontaktiPage() {
                     borderTop: "3px solid var(--color-signal)",
                   }}
                 >
-                  <div
-                    style={{
-                      fontSize: "2rem",
-                      marginBottom: "1rem",
-                    }}
-                  >
-                    ✓
+                  <div style={{ marginBottom: "1.25rem" }}>
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                      <rect width="40" height="40" fill="var(--color-signal)" opacity="0.12"/>
+                      <polyline points="10,20 17,27 30,13" stroke="var(--color-signal)" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"/>
+                    </svg>
                   </div>
                   <h2
                     style={{
@@ -351,7 +350,7 @@ export default function KontaktiPage() {
                     Sazināties
                   </p>
                   <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-                    {CONTACT_INFO.map(({ label, value, href, icon }) => (
+                    {CONTACT_INFO.map(({ label, value, href, Icon }) => (
                       <div key={label}>
                         <p
                           style={{
@@ -377,7 +376,7 @@ export default function KontaktiPage() {
                             gap: "0.5rem",
                           }}
                         >
-                          <span>{icon}</span>
+                          <Icon size={16} color="var(--color-steel)" />
                           {value}
                         </a>
                       </div>

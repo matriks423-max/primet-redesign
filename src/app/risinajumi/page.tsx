@@ -335,7 +335,7 @@ export default function RisinajumiPage() {
                       marginTop: "0.25rem",
                     }}
                   >
-                    Pieprasīt cenu →
+                    Pieprasīt cenu &rarr;
                   </Link>
                 </div>
               </StaggerItemExit>
