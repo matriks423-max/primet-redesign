@@ -1,8 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { Reveal, Stagger, StaggerItem, motion } from "@/components/motion";
 import { IconPhone, IconMail, IconMessageSquare } from "@/components/Icons";
+
+const KineticText = dynamic(() => import("@/components/KineticText"), { ssr: false });
 
 const SUBJECTS = [
   "Iekārtu piegāde",
@@ -59,6 +62,7 @@ export default function KontaktiPage() {
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section
         data-section="hero"
+        className="noise"
         style={{
           background: "var(--color-navy)",
           padding: "8rem 0 5rem",
@@ -83,19 +87,36 @@ export default function KontaktiPage() {
             <p className="label" style={{ marginBottom: "1.5rem", color: "var(--color-signal)" }}>
               Kontakti
             </p>
-            <h1
+            <KineticText
+              text="Runājiet ar"
+              tag="h1"
+              delay={0.2}
+              splitBy="chars"
               style={{
                 fontSize: "clamp(2.5rem, 5vw, 4rem)",
                 fontWeight: 800,
                 color: "var(--color-white)",
                 letterSpacing: "-0.03em",
+                lineHeight: 1.0,
+                display: "block",
+                marginBottom: "0.05em",
+              }}
+            />
+            <KineticText
+              text="mūsu komandu"
+              tag="h1"
+              delay={0.32}
+              splitBy="chars"
+              style={{
+                fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                fontWeight: 800,
+                color: "var(--color-signal)",
+                letterSpacing: "-0.03em",
                 lineHeight: 1.05,
-                maxWidth: "18ch",
+                display: "block",
                 marginBottom: "1.5rem",
               }}
-            >
-              Runājiet ar mūsu komandu
-            </h1>
+            />
             <p
               style={{
                 fontSize: "1.125rem",
@@ -119,6 +140,7 @@ export default function KontaktiPage() {
       >
         <div className="container">
           <div
+            className="contact-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "2fr 1fr",
@@ -177,6 +199,7 @@ export default function KontaktiPage() {
                   >
                     {/* Row 1: name + company */}
                     <div
+                      className="form-row"
                       style={{
                         display: "grid",
                         gridTemplateColumns: "1fr 1fr",
@@ -189,6 +212,7 @@ export default function KontaktiPage() {
 
                     {/* Row 2: phone + email */}
                     <div
+                      className="form-row"
                       style={{
                         display: "grid",
                         gridTemplateColumns: "1fr 1fr",
@@ -313,14 +337,28 @@ export default function KontaktiPage() {
                       className="btn btn-primary"
                       style={{
                         justifyContent: "center",
-                        opacity: !agreed ? 0.5 : 1,
+                        opacity: !agreed ? 0.45 : 1,
                         cursor: !agreed ? "not-allowed" : "pointer",
-                        transition: "opacity 160ms",
+                        transition: "opacity 200ms, box-shadow 200ms",
+                        boxShadow: agreed && formState !== "submitting"
+                          ? "0 0 0 0 rgba(204,51,0,0)"
+                          : "none",
+                        position: "relative",
+                        overflow: "hidden",
                       }}
+                      whileHover={agreed ? { boxShadow: "0 6px 28px rgba(204,51,0,0.35)" } : {}}
                       whileTap={agreed ? { scale: 0.97 } : {}}
-                      transition={{ duration: 0.16 }}
+                      transition={{ duration: 0.2 }}
                     >
-                      {formState === "submitting" ? "Sūta…" : "Nosūtīt pieprasījumu"}
+                      {formState === "submitting" ? (
+                        <span style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style={{ animation: "spin 1s linear infinite" }}>
+                            <circle cx="8" cy="8" r="6" stroke="rgba(255,255,255,0.3)" strokeWidth="2"/>
+                            <path d="M8 2a6 6 0 0 1 6 6" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                          </svg>
+                          Sūta…
+                        </span>
+                      ) : "Nosūtīt pieprasījumu"}
                     </motion.button>
                   </div>
                 </form>
@@ -480,7 +518,7 @@ export default function KontaktiPage() {
   );
 }
 
-// ── Field helper ──────────────────────────────────────────────────────────
+// ── Field helper — floating label ─────────────────────────────────────────
 function Field({
   label,
   id,
@@ -492,40 +530,55 @@ function Field({
   type?: string;
   required?: boolean;
 }) {
+  const [focused, setFocused] = useState(false);
+  const [hasValue, setHasValue] = useState(false);
+
+  const lifted = focused || hasValue;
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+    <div style={{ position: "relative", paddingTop: "1.25rem" }}>
       <label
         htmlFor={id}
         style={{
-          fontSize: "0.75rem",
-          fontWeight: 700,
-          letterSpacing: "0.06em",
-          textTransform: "uppercase",
-          color: "var(--color-steel)",
+          position: "absolute",
+          left: "1rem",
+          top: lifted ? "0" : "calc(1.25rem + 0.8rem)",
+          fontSize: lifted ? "0.6875rem" : "0.9375rem",
+          fontWeight: lifted ? 700 : 400,
+          letterSpacing: lifted ? "0.06em" : "0",
+          textTransform: lifted ? "uppercase" : "none",
+          color: focused ? "var(--color-signal)" : "var(--color-steel)",
+          transition: "all 180ms cubic-bezier(0.23, 1, 0.32, 1)",
+          pointerEvents: "none",
+          zIndex: 1,
         }}
       >
         {label}
-        {required && (
-          <span style={{ color: "var(--color-signal)", marginLeft: "3px" }}>*</span>
-        )}
+        {required && <span style={{ color: "var(--color-signal)", marginLeft: "2px" }}>*</span>}
       </label>
       <input
         id={id}
         type={type}
         required={required}
         style={{
-          padding: "0.75rem 1rem",
+          width: "100%",
+          padding: "0.75rem 1rem 0.75rem",
           background: "var(--color-white)",
-          border: "1.5px solid var(--color-border)",
-          borderRadius: "var(--radius)",
+          border: "none",
+          borderBottom: `2px solid ${focused ? "var(--color-signal)" : "var(--color-border)"}`,
           fontSize: "0.9375rem",
           color: "var(--color-ink)",
           fontFamily: "var(--font-inter), system-ui, sans-serif",
           outline: "none",
-          transition: "border-color 160ms",
+          transition: "border-color 180ms",
+          boxSizing: "border-box",
         }}
-        onFocus={(e) => (e.currentTarget.style.borderColor = "var(--color-signal)")}
-        onBlur={(e) => (e.currentTarget.style.borderColor = "var(--color-border)")}
+        onFocus={() => setFocused(true)}
+        onBlur={(e) => {
+          setFocused(false);
+          setHasValue(e.currentTarget.value.length > 0);
+        }}
+        onChange={(e) => setHasValue(e.target.value.length > 0)}
       />
     </div>
   );

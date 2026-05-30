@@ -10,6 +10,8 @@ import MagneticButton from "@/components/MagneticButton";
 const ParticleField = dynamic(() => import("@/components/ParticleField"), { ssr: false });
 const KineticText = dynamic(() => import("@/components/KineticText"), { ssr: false });
 const HorizontalScroll = dynamic(() => import("@/components/HorizontalScroll"), { ssr: false });
+const PinnedStats = dynamic(() => import("@/components/PinnedStats"), { ssr: false });
+const SchematicDraw = dynamic(() => import("@/components/SchematicDraw"), { ssr: false });
 
 const SPECS = ["CNC Ražošana", "MIG/MAG Metināšana", "PLC Automatizācija", "Rezerves daļas"];
 
@@ -60,6 +62,25 @@ export default function HomePage() {
           overflow: "hidden",
         }}
       >
+        {/* Industrial machine photo — behind everything, adds depth */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1800&q=60"
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "center",
+            opacity: 0.15,
+            pointerEvents: "none",
+          }}
+          loading="eager"
+        />
+
         {/* Three.js particle field — absolute fill behind content */}
         <ParticleField />
 
@@ -99,6 +120,7 @@ export default function HomePage() {
 
         <div className="container" style={{ position: "relative", zIndex: 3 }}>
           <div
+            className="hero-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "clamp(300px, 55%, 640px) 1fr",
@@ -227,9 +249,9 @@ export default function HomePage() {
               </div>
               <div style={{ background: "oklch(15% 0.04 255)", border: "1px solid rgba(255,255,255,0.07)", padding: "1.5rem 1.25rem", display: "flex", flexDirection: "column", gap: "1.125rem" }}>
                 {[
-                  { label: "Kapacitāte",   value: 0.84, display: "200 kg/h" },
-                  { label: "Efektivitāte", value: 0.91, display: "91%"      },
-                  { label: "Dīkstāves",    value: 0.06, display: "< 2%", color: "oklch(62% 0.19 145)" },
+                  { label: "Kapacitāte",   value: 0.84, display: "200 kg/h", color: "oklch(62% 0.19 145)" },
+                  { label: "Efektivitāte", value: 0.91, display: "91%",      color: "oklch(62% 0.19 145)" },
+                  { label: "Dīkstāves",    value: 0.06, display: "< 2%",     color: "oklch(68% 0.18 60)"  },
                 ].map(({ label, value, display, color }, i) => (
                   <div key={label} style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
@@ -322,6 +344,9 @@ export default function HomePage() {
         />
       </div>
 
+      {/* ── PINNED STATS ─────────────────────────────────────────────── */}
+      <PinnedStats />
+
       {/* ── SOLUTIONS — horizontal scroll ─────────────────────────────── */}
       <div data-section="solutions" style={{ background: "var(--color-stone)" }}>
         {/* Section header — not pinned */}
@@ -400,41 +425,48 @@ export default function HomePage() {
       </div>
 
       {/* ── ABOUT TEASER ─────────────────────────────────────────────── */}
-      <section data-section="about" className="section-pad" style={{ background: "var(--color-warm)" }}>
+      <section data-section="about" className="noise section-pad" style={{ background: "var(--color-navy)" }}>
         <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "clamp(2.5rem, 6vw, 5rem)", alignItems: "center" }}>
+          {/* Top: copy + quote */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "clamp(2.5rem, 6vw, 5rem)", alignItems: "center", marginBottom: "5rem" }}>
             <Reveal>
-              <p className="label" style={{ marginBottom: "1rem" }}>Par mums</p>
-              <h2 style={{ fontSize: "var(--fs-h2)", fontWeight: 700, letterSpacing: "-0.02em", lineHeight: 1.15, marginBottom: "1.5rem" }}>Vairāk nekā 20 gadu pieredze nozarē</h2>
-              <p style={{ fontSize: "1rem", color: "var(--color-steel)", lineHeight: 1.7, maxWidth: "44ch", marginBottom: "2rem" }}>
-                SIA Primet nodrošina Latvijas un Baltijas pārtikas rūpniecību ar uzticamām iekārtām un profesionālu servisu. Mēs strādājam ar vadošajiem Eiropas ražotājiem un nodrošinām pilnu piegādes ķēdi.
+              <p className="label" style={{ marginBottom: "1rem", color: "var(--color-signal)" }}>Par mums</p>
+              <h2 style={{ fontSize: "var(--fs-h2)", fontWeight: 700, letterSpacing: "-0.02em", lineHeight: 1.15, marginBottom: "1.5rem", color: "var(--color-white)" }}>
+                Vairāk nekā 20 gadu pieredze nozarē
+              </h2>
+              <p style={{ fontSize: "1rem", color: "rgba(255,255,255,0.55)", lineHeight: 1.75, maxWidth: "44ch", marginBottom: "2rem" }}>
+                SIA Primet nodrošina Latvijas un Baltijas pārtikas rūpniecību ar uzticamām iekārtām un profesionālu servisu. Pilna piegādes ķēde — no ražotāja līdz nodošanai ekspluatācijā.
               </p>
-              <motion.a
-                href="/par-uznemumu"
-                className="btn btn-outline-dark"
-                whileTap={{ transform: "scale(0.97)" }}
-                transition={{ duration: 0.16, ease: [0.23, 1, 0.32, 1] }}
-              >
+              <MagneticButton href="/par-uznemumu" className="btn btn-outline">
                 Uzzināt vairāk
-              </motion.a>
+              </MagneticButton>
             </Reveal>
 
             <Reveal delay={0.15}>
-              <figure style={{ background: "var(--color-navy)", padding: "2.5rem", position: "relative" }}>
-                <div style={{ position: "absolute", top: 0, left: "2.5rem", right: "2.5rem", height: "3px", background: "var(--color-signal)" }} />
-                <blockquote style={{ fontSize: "1.125rem", fontWeight: 500, color: "var(--color-white)", lineHeight: 1.6, letterSpacing: "-0.01em", marginBottom: "1.5rem" }}>
-                  &ldquo;Mūsu klienti neiegādājas iekārtas — viņi iegādājas darbspēju. Katrs mūsu servisa vizītes mērķis ir nodrošināt, ka ražošana turpinās bez pārtraukuma.&rdquo;
+              <figure style={{ borderLeft: "3px solid var(--color-signal)", paddingLeft: "2rem", position: "relative" }}>
+                <blockquote style={{ fontSize: "1.1875rem", fontWeight: 500, color: "rgba(255,255,255,0.85)", lineHeight: 1.65, letterSpacing: "-0.01em", marginBottom: "1.5rem", fontStyle: "italic" }}>
+                  &ldquo;Mūsu klienti neiegādājas iekārtas — viņi iegādājas darbspēju. Katrs servisa vizītes mērķis ir nodrošināt, ka ražošana turpinās.&rdquo;
                 </blockquote>
                 <figcaption style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                  <div style={{ width: "36px", height: "36px", background: "var(--color-signal)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.875rem", fontWeight: 700, color: "var(--color-white)", flexShrink: 0 }}>P</div>
+                  <div style={{ width: "32px", height: "32px", background: "var(--color-signal)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.8125rem", fontWeight: 700, color: "var(--color-white)", flexShrink: 0 }}>P</div>
                   <div>
-                    <div style={{ fontSize: "0.8125rem", fontWeight: 600, color: "var(--color-white)", letterSpacing: "0.02em" }}>Primet dibinātājs</div>
-                    <div style={{ fontSize: "0.6875rem", color: "rgba(255,255,255,0.4)", letterSpacing: "0.06em" }}>Rīga, Latvija</div>
+                    <div style={{ fontSize: "0.8125rem", fontWeight: 600, color: "rgba(255,255,255,0.85)" }}>Primet dibinātājs</div>
+                    <div style={{ fontSize: "0.6875rem", color: "rgba(255,255,255,0.35)", letterSpacing: "0.06em" }}>RĪGA, LATVIJA</div>
                   </div>
                 </figcaption>
               </figure>
             </Reveal>
           </div>
+
+          {/* Bottom: engineering schematic draws in on scroll */}
+          <Reveal>
+            <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", paddingTop: "3rem" }}>
+              <p style={{ fontSize: "0.6875rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: "2rem" }}>
+                — Ražošanas līnijas shēma / WF sērija
+              </p>
+              <SchematicDraw />
+            </div>
+          </Reveal>
         </div>
       </section>
 

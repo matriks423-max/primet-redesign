@@ -1,7 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { Reveal, Stagger, StaggerItem, CountUp } from "@/components/motion";
+import TiltCard from "@/components/TiltCard";
+
+const KineticText = dynamic(() => import("@/components/KineticText"), { ssr: false });
 
 const STATS = [
   { value: 20, suffix: "+", label: "Gadi nozarē" },
@@ -56,6 +60,7 @@ export default function ParUznemumuPage() {
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section
         data-section="hero"
+        className="noise"
         style={{
           background: "var(--color-navy)",
           padding: "8rem 0 5rem",
@@ -80,19 +85,36 @@ export default function ParUznemumuPage() {
             <p className="label" style={{ marginBottom: "1.5rem", color: "var(--color-signal)" }}>
               Par uzņēmumu
             </p>
-            <h1
+            <KineticText
+              text="Ražošanas partneri,"
+              tag="h1"
+              delay={0.2}
+              splitBy="chars"
               style={{
                 fontSize: "clamp(2.5rem, 5vw, 4rem)",
                 fontWeight: 800,
                 color: "var(--color-white)",
                 letterSpacing: "-0.03em",
+                lineHeight: 1.0,
+                display: "block",
+                marginBottom: "0.05em",
+              }}
+            />
+            <KineticText
+              text="nevis tikai piegādātāji"
+              tag="h1"
+              delay={0.38}
+              splitBy="chars"
+              style={{
+                fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                fontWeight: 800,
+                color: "var(--color-signal)",
+                letterSpacing: "-0.03em",
                 lineHeight: 1.05,
-                maxWidth: "18ch",
+                display: "block",
                 marginBottom: "1.5rem",
               }}
-            >
-              Ražošanas partneri, nevis tikai piegādātāji
-            </h1>
+            />
             <p
               style={{
                 fontSize: "1.125rem",
@@ -203,67 +225,64 @@ export default function ParUznemumuPage() {
             </Reveal>
 
             <Reveal delay={0.15}>
-              {/* Industrial schematic placeholder — on-brand, zero-emoji */}
+              {/* Industrial machine photo */}
               <div
                 style={{
                   aspectRatio: "4/3",
-                  background: "var(--color-navy)",
                   position: "relative",
                   overflow: "hidden",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  background: "var(--color-navy)",
                 }}
               >
-                {/* Grid bg */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://images.unsplash.com/photo-1565180977591-3c5d6e0038db?auto=format&fit=crop&w=1200&q=80"
+                  alt="Pārtikas rūpniecības ražošanas iekārta"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block",
+                  }}
+                  loading="lazy"
+                />
+                {/* Dark gradient overlay for on-brand feel */}
                 <div
                   aria-hidden="true"
                   style={{
                     position: "absolute",
                     inset: 0,
-                    backgroundImage: [
-                      "linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)",
-                      "linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)",
-                    ].join(","),
-                    backgroundSize: "32px 32px",
+                    background: "linear-gradient(135deg, rgba(10,22,40,0.55) 0%, rgba(10,22,40,0.1) 100%)",
                   }}
                 />
                 {/* Signal accent left rail */}
-                <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, width: "3px", height: "100%", background: "var(--color-signal)" }} />
-                {/* Schematic SVG */}
-                <svg
+                <div
                   aria-hidden="true"
-                  width="220"
-                  height="160"
-                  viewBox="0 0 220 160"
-                  fill="none"
-                  style={{ position: "relative", zIndex: 1, opacity: 0.7 }}
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "3px",
+                    height: "100%",
+                    background: "var(--color-signal)",
+                  }}
+                />
+                {/* Corner label */}
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: "1rem",
+                    right: "1rem",
+                    fontSize: "0.625rem",
+                    fontWeight: 600,
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    color: "rgba(255,255,255,0.45)",
+                    background: "rgba(10,22,40,0.6)",
+                    padding: "0.25rem 0.5rem",
+                  }}
                 >
-                  {/* Machine body */}
-                  <rect x="20" y="40" width="70" height="80" stroke="rgba(255,255,255,0.2)" strokeWidth="1" fill="none" />
-                  <rect x="28" y="52" width="54" height="16" fill="rgba(204,51,0,0.25)" stroke="rgba(204,51,0,0.5)" strokeWidth="1" />
-                  <rect x="28" y="72" width="54" height="40" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
-                  {/* Hopper */}
-                  <path d="M35 40 L28 24 L62 24 L55 40" stroke="rgba(255,255,255,0.15)" strokeWidth="1" fill="rgba(255,255,255,0.03)" />
-                  {/* Output pipe */}
-                  <path d="M90 100 L130 100 L130 120 L150 120" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" fill="none" />
-                  {/* Conveyor */}
-                  <rect x="130" y="118" width="70" height="6" stroke="rgba(255,255,255,0.12)" strokeWidth="1" fill="rgba(255,255,255,0.04)" />
-                  <line x1="140" y1="118" x2="140" y2="124" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-                  <line x1="155" y1="118" x2="155" y2="124" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-                  <line x1="170" y1="118" x2="170" y2="124" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-                  <line x1="185" y1="118" x2="185" y2="124" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-                  {/* Dimension lines */}
-                  <line x1="20" y1="132" x2="90" y2="132" stroke="rgba(255,255,255,0.07)" strokeWidth="0.5" />
-                  <line x1="20" y1="129" x2="20" y2="135" stroke="rgba(255,255,255,0.07)" strokeWidth="0.5" />
-                  <line x1="90" y1="129" x2="90" y2="135" stroke="rgba(255,255,255,0.07)" strokeWidth="0.5" />
-                  {/* Spec labels */}
-                  <text x="55" y="148" textAnchor="middle" fontSize="7" fill="rgba(255,255,255,0.2)" fontFamily="monospace" letterSpacing="0.5">200 KG/H</text>
-                  <text x="165" y="112" textAnchor="middle" fontSize="7" fill="rgba(255,255,255,0.2)" fontFamily="monospace" letterSpacing="0.5">WF-200</text>
-                </svg>
-                {/* Label */}
-                <div style={{ position: "absolute", bottom: "1rem", right: "1rem", fontSize: "0.625rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.2)" }}>
-                  Uzņēmuma foto
+                  Ražošanas iekārta
                 </div>
               </div>
             </Reveal>
@@ -274,6 +293,7 @@ export default function ParUznemumuPage() {
       {/* ── FOUNDER QUOTE ────────────────────────────────────────────── */}
       <section
         data-section="quote"
+        className="noise"
         style={{ background: "var(--color-ink)", padding: "5rem 0" }}
       >
         <div className="container">
@@ -363,45 +383,44 @@ export default function ParUznemumuPage() {
           >
             {CAPABILITIES.map((c) => (
               <StaggerItem key={c.code}>
-                <div
-                  style={{
-                    background: "var(--color-stone)",
-                    padding: "2rem",
-                    height: "100%",
-                  }}
+                <TiltCard
+                  intensity={5}
+                  style={{ background: "var(--color-stone)", height: "100%" }}
                 >
-                  <span
-                    style={{
-                      fontSize: "0.75rem",
-                      fontWeight: 700,
-                      letterSpacing: "0.1em",
-                      color: "var(--color-signal)",
-                      display: "block",
-                      marginBottom: "0.75rem",
-                    }}
-                  >
-                    {c.code}
-                  </span>
-                  <h3
-                    style={{
-                      fontSize: "var(--fs-h4)",
-                      fontWeight: 700,
-                      letterSpacing: "-0.01em",
-                      marginBottom: "0.75rem",
-                    }}
-                  >
-                    {c.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontSize: "0.875rem",
-                      color: "var(--color-steel)",
-                      lineHeight: 1.65,
-                    }}
-                  >
-                    {c.desc}
-                  </p>
-                </div>
+                  <div style={{ padding: "2rem", height: "100%" }}>
+                    <span
+                      style={{
+                        fontSize: "0.75rem",
+                        fontWeight: 700,
+                        letterSpacing: "0.1em",
+                        color: "var(--color-signal)",
+                        display: "block",
+                        marginBottom: "0.75rem",
+                      }}
+                    >
+                      {c.code}
+                    </span>
+                    <h3
+                      style={{
+                        fontSize: "var(--fs-h4)",
+                        fontWeight: 700,
+                        letterSpacing: "-0.01em",
+                        marginBottom: "0.75rem",
+                      }}
+                    >
+                      {c.title}
+                    </h3>
+                    <p
+                      style={{
+                        fontSize: "0.875rem",
+                        color: "var(--color-steel)",
+                        lineHeight: 1.65,
+                      }}
+                    >
+                      {c.desc}
+                    </p>
+                  </div>
+                </TiltCard>
               </StaggerItem>
             ))}
           </Stagger>
@@ -411,7 +430,7 @@ export default function ParUznemumuPage() {
       {/* ── VALUES ───────────────────────────────────────────────────── */}
       <section
         data-section="values"
-        className="section-pad"
+        className="section-pad noise"
         style={{ background: "var(--color-ink)" }}
       >
         <div className="container">

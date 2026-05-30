@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+<meta charset="utf-8">
+<title>Primet</title>
+<script>
+  // GitHub Pages SPA redirect.
+  // When GH Pages serves this 404.html for a missing path,
+  // store the destination in sessionStorage and redirect to the app root.
+  // The root index.html then reads it and restores the route via history.replaceState.
+  var base = '/primet-redesign';
+  var path = window.location.pathname;
+  if (path.indexOf(base) === 0) {
+    var dest = path.slice(base.length) || '/';
+    sessionStorage.setItem('__spa_redirect', dest + window.location.search + window.location.hash);
+    window.location.replace(base + '/');
+  }
+</script>
+</head>
+<body></body>
+</html>

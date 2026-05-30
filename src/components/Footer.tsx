@@ -6,28 +6,32 @@ import Logo from "./Logo";
 const LINKS = {
   "Uzņēmums": [
     { href: "/par-uznemumu", label: "Par mums" },
-    { href: "/risinajumi", label: "Risinājumi" },
-    { href: "/serviss", label: "Serviss" },
-    { href: "/kontakti", label: "Kontakti" },
+    { href: "/risinajumi",   label: "Risinājumi" },
+    { href: "/serviss",      label: "Serviss" },
+    { href: "/kontakti",     label: "Kontakti" },
   ],
   "Risinājumi": [
-    { href: "/risinajumi#galas", label: "Gaļas apstrāde" },
-    { href: "/risinajumi#piena", label: "Piena ražošana" },
-    { href: "/risinajumi#konservesana", label: "Konservēšana" },
-    { href: "/risinajumi#pakosana", label: "Iepakošana" },
+    { href: "/risinajumi", label: "Gaļas apstrāde" },
+    { href: "/risinajumi", label: "Piena ražošana" },
+    { href: "/risinajumi", label: "Konservēšana" },
+    { href: "/risinajumi", label: "Iepakošana" },
   ],
 };
 
 export default function Footer() {
   return (
     <footer
+      className="noise"
       style={{
         background: "var(--color-navy)",
         color: "var(--color-white)",
         paddingTop: "4rem",
         paddingBottom: "2.5rem",
+        position: "relative",
       }}
     >
+      {/* Signal accent top bar */}
+      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, var(--color-signal) 0%, transparent 60%)" }} />
       <div className="container">
         <div
           style={{
@@ -55,7 +59,7 @@ export default function Footer() {
             <p
               style={{
                 fontSize: "var(--fs-label)",
-                color: "rgba(255,255,255,0.4)",
+                color: "rgba(255,255,255,0.6)",
                 marginTop: "1.5rem",
                 letterSpacing: "0.04em",
               }}
@@ -73,7 +77,7 @@ export default function Footer() {
                   fontWeight: 700,
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.4)",
+                  color: "rgba(255,255,255,0.6)",
                   marginBottom: "1.25rem",
                 }}
               >
@@ -109,7 +113,7 @@ export default function Footer() {
                 fontWeight: 700,
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
-                color: "rgba(255,255,255,0.4)",
+                color: "rgba(255,255,255,0.6)",
                 marginBottom: "1.25rem",
               }}
             >
@@ -121,7 +125,7 @@ export default function Footer() {
                 { label: "E-pasts", value: "info@primet.lv", href: "mailto:info@primet.lv" },
               ].map(({ label, value, href }) => (
                 <div key={label}>
-                  <p style={{ fontSize: "var(--fs-label)", color: "rgba(255,255,255,0.4)", marginBottom: "2px" }}>
+                  <p style={{ fontSize: "var(--fs-label)", color: "rgba(255,255,255,0.6)", marginBottom: "2px" }}>
                     {label}
                   </p>
                   <a
@@ -151,15 +155,15 @@ export default function Footer() {
             alignItems: "center",
             paddingTop: "1.5rem",
             fontSize: "var(--fs-label)",
-            color: "rgba(255,255,255,0.35)",
+            color: "rgba(255,255,255,0.55)",
           }}
         >
-          <span>© 2024 SIA Primet. Visas tiesības aizsargātas.</span>
+          <span>© 2026 SIA Primet. Visas tiesības aizsargātas.</span>
           <div style={{ display: "flex", gap: "1.5rem" }}>
-            <Link href="/privatuma-politika" style={{ color: "inherit", textDecoration: "none" }}>
+            <Link href="/kontakti" style={{ color: "inherit", textDecoration: "none" }}>
               Privātuma politika
             </Link>
-            <Link href="/sertifikati" style={{ color: "inherit", textDecoration: "none" }}>
+            <Link href="/risinajumi" style={{ color: "inherit", textDecoration: "none" }}>
               Sertifikāti
             </Link>
           </div>

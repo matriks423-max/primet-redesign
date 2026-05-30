@@ -13,47 +13,51 @@ export default function Logo({ variant = "dark", className = "" }: LogoProps) {
     <span
       className={className}
       style={{
-        display: "inline-flex",
+        display:    "inline-flex",
         alignItems: "center",
-        gap: "10px",
+        gap:        "12px",
         userSelect: "none",
       }}
     >
-      {/* Geometric P mark — 20×28 grid */}
+      {/*
+        Mark: precision L-bracket with signal accent dot.
+        Evokes engineering corner gauge / alignment mark.
+        24×24 viewBox.
+      */}
       <svg
-        width="20"
-        height="28"
-        viewBox="0 0 20 28"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
         style={{ flexShrink: 0 }}
       >
-        {/* Stem */}
-        <rect x="0" y="0" width="4" height="28" fill={ink} />
-        {/* Bowl top */}
-        <rect x="4" y="0" width="12" height="3" fill={ink} />
-        {/* Bowl right */}
-        <rect x="16" y="0" width="4" height="13" fill={ink} />
-        {/* Bowl mid-bar */}
-        <rect x="4" y="10" width="12" height="3" fill={ink} />
-        {/* Signal accent rail */}
-        <rect x="0" y="26" width="20" height="2" fill={signal} />
+        {/* Vertical stem */}
+        <rect x="0" y="0" width="3" height="24" fill={ink} />
+        {/* Top horizontal arm */}
+        <rect x="3" y="0" width="15" height="3" fill={ink} />
+        {/* Mid crossbar — P bowl bottom */}
+        <rect x="3" y="11" width="13" height="2.5" fill={ink} />
+        {/* Bowl right wall */}
+        <rect x="16" y="0" width="3" height="13.5" fill={ink} />
+        {/* Signal dot — bottom-right corner */}
+        <rect x="19" y="19" width="5" height="5" fill={signal} />
       </svg>
 
-      {/* Wordmark — uses loaded Inter variable font */}
+      {/* Wordmark */}
       <span
         style={{
-          fontFamily: "var(--font-inter), system-ui, sans-serif",
-          fontWeight: 800,
-          fontSize: "17px",
-          letterSpacing: "-0.05em",
-          color: ink,
-          lineHeight: 1,
-          paddingBottom: "1px",
+          fontFamily:    "var(--font-inter), system-ui, sans-serif",
+          fontWeight:    800,
+          fontSize:      "16px",
+          letterSpacing: "0.08em",
+          color:         ink,
+          lineHeight:    1,
+          textTransform: "uppercase",
         }}
       >
-        PRIMET
+        Primet
       </span>
     </span>
   );

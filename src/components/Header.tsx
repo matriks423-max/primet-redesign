@@ -6,20 +6,20 @@ import { usePathname } from "next/navigation";
 import Logo from "./Logo";
 
 const INDUSTRIES = [
-  { label: "Gaļas apstrāde",       href: "/risinajumi/gala" },
-  { label: "Piena ražošana",        href: "/risinajumi/piens" },
-  { label: "Konservēšana",          href: "/risinajumi/konservi" },
-  { label: "Maizes & konditerija",  href: "/risinajumi/maize" },
-  { label: "Dzērienu ražošana",     href: "/risinajumi/dzerieni" },
-  { label: "Iepakošana & marķēšana",href: "/risinajumi/iepakosana" },
+  { label: "Gaļas apstrāde",        href: "/risinajumi" },
+  { label: "Piena ražošana",         href: "/risinajumi" },
+  { label: "Konservēšana",           href: "/risinajumi" },
+  { label: "Maizes & konditerija",   href: "/risinajumi" },
+  { label: "Dzērienu ražošana",      href: "/risinajumi" },
+  { label: "Iepakošana & marķēšana", href: "/risinajumi" },
 ];
 
 const PROCESSES = [
-  { label: "Konveijeri",            href: "/risinajumi/konveijeri" },
-  { label: "Mazgāšana / žāvēšana",  href: "/risinajumi/mazgasana" },
-  { label: "Tvaicēšana",            href: "/risinajumi/tvaicesana" },
-  { label: "Iepakošana",            href: "/risinajumi/iepakosana-process" },
-  { label: "Loģistika",             href: "/risinajumi/logistika" },
+  { label: "Konveijeri",             href: "/risinajumi" },
+  { label: "Mazgāšana / žāvēšana",   href: "/risinajumi" },
+  { label: "Tvaicēšana",             href: "/risinajumi" },
+  { label: "Iepakošana",             href: "/risinajumi" },
+  { label: "Loģistika",              href: "/risinajumi" },
 ];
 
 const NAV = [
@@ -97,9 +97,10 @@ export default function Header() {
       {/* ── LANGUAGE BAR ────────────────────────────────────── */}
       <div
         style={{
-          background: isLight ? "rgba(10,22,40,0.6)" : "var(--color-warm)",
-          borderBottom: `1px solid ${isLight ? "rgba(255,255,255,0.08)" : "var(--color-border)"}`,
-          transition: "background 200ms, border-color 200ms",
+          background: isLight ? "transparent" : "var(--color-warm)",
+          borderBottom: `1px solid ${isLight ? "rgba(255,255,255,0.07)" : "var(--color-border)"}`,
+          transition: "background 300ms, border-color 300ms",
+          backdropFilter: isLight ? "none" : "none",
         }}
       >
         <div
@@ -134,11 +135,19 @@ export default function Header() {
       {/* ── MAIN HEADER ─────────────────────────────────────── */}
       <header
         style={{
-          background: isHero ? "var(--color-navy)" : scrolled ? "rgba(250,250,248,0.96)" : "var(--color-stone)",
-          borderBottom: scrolled ? "1px solid var(--color-border)" : "1px solid rgba(255,255,255,0.07)",
-          transition: "border-color 200ms, background 200ms",
-          backdropFilter: scrolled ? "blur(8px)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(8px)" : "none",
+          background: isLight
+            ? "rgba(10,22,40,0.45)"
+            : isHero && scrolled
+              ? "rgba(10,22,40,0.92)"
+              : scrolled
+                ? "rgba(250,250,248,0.92)"
+                : "var(--color-stone)",
+          borderBottom: isLight
+            ? "1px solid rgba(255,255,255,0.06)"
+            : "1px solid var(--color-border)",
+          transition: "background 320ms var(--ease-out), border-color 320ms",
+          backdropFilter: (isHero && scrolled) || (!isHero && scrolled) ? "blur(16px) saturate(1.4)" : "none",
+          WebkitBackdropFilter: (isHero && scrolled) || (!isHero && scrolled) ? "blur(16px) saturate(1.4)" : "none",
         }}
       >
         {/* Scroll progress */}

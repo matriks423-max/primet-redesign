@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import SmoothScroll from "@/components/SmoothScroll";
+import SpaRedirect from "@/components/SpaRedirect";
 
 // These components use browser-only APIs — must be client-side only
 const CustomCursor = dynamic(() => import("@/components/CustomCursor"), { ssr: false });
@@ -15,6 +16,7 @@ const PageTransition = dynamic(() => import("@/components/PageTransition"), { ss
 export default function ClientProviders({ children }: { children: React.ReactNode }) {
   return (
     <SmoothScroll>
+      <SpaRedirect />
       <PageTransition>
         <CustomCursor />
         {children}

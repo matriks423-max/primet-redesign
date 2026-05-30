@@ -2,7 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { Reveal, Stagger, StaggerItemExit, AnimatePresence, motion } from "@/components/motion";
+import TiltCard from "@/components/TiltCard";
+
+const KineticText = dynamic(() => import("@/components/KineticText"), { ssr: false });
 
 const CATEGORIES = [
   { id: "all", label: "Visi risinājumi" },
@@ -143,19 +147,36 @@ export default function RisinajumiPage() {
             <p className="label" style={{ marginBottom: "1.5rem", color: "var(--color-signal)" }}>
               Iekārtu katalogs
             </p>
-            <h1
+            <KineticText
+              text="Pārtikas rūpniecības"
+              tag="h1"
+              delay={0.2}
+              splitBy="chars"
               style={{
                 fontSize: "clamp(2.5rem, 5vw, 4rem)",
                 fontWeight: 800,
                 color: "var(--color-white)",
                 letterSpacing: "-0.03em",
+                lineHeight: 1.0,
+                display: "block",
+                marginBottom: "0.05em",
+              }}
+            />
+            <KineticText
+              text="iekārtas Latvijā"
+              tag="h1"
+              delay={0.35}
+              splitBy="chars"
+              style={{
+                fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                fontWeight: 800,
+                color: "var(--color-signal)",
+                letterSpacing: "-0.03em",
                 lineHeight: 1.05,
-                maxWidth: "22ch",
+                display: "block",
                 marginBottom: "1.5rem",
               }}
-            >
-              Pārtikas rūpniecības iekārtas Latvijā
-            </h1>
+            />
             <p
               style={{
                 fontSize: "1.125rem",
@@ -183,37 +204,45 @@ export default function RisinajumiPage() {
             <div
               role="tablist"
               aria-label="Iekārtu kategorijas"
+              className="filter-tabs"
               style={{
                 display: "flex",
-                flexWrap: "wrap",
-                gap: "2px",
-                background: "var(--color-border)",
-                padding: "2px",
-                width: "fit-content",
+                gap: "0",
+                borderBottom: "2px solid var(--color-border)",
+                overflowX: "auto",
+                scrollbarWidth: "none",
               }}
             >
-              {CATEGORIES.map(({ id, label }) => (
-                <button
-                  key={id}
-                  role="tab"
-                  aria-selected={activeCategory === id}
-                  onClick={() => setActiveCategory(id)}
-                  style={{
-                    padding: "0.5rem 1.25rem",
-                    fontSize: "0.8125rem",
-                    fontWeight: 600,
-                    letterSpacing: "0.02em",
-                    border: "none",
-                    cursor: "pointer",
-                    background: activeCategory === id ? "var(--color-signal)" : "var(--color-stone)",
-                    color: activeCategory === id ? "var(--color-white)" : "var(--color-steel)",
-                    transition: "background 160ms, color 160ms",
-                    fontFamily: "var(--font-inter), system-ui, sans-serif",
-                  }}
-                >
-                  {label}
-                </button>
-              ))}
+              {CATEGORIES.map(({ id, label }) => {
+                const active = activeCategory === id;
+                return (
+                  <button
+                    key={id}
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => setActiveCategory(id)}
+                    style={{
+                      padding: "0.75rem 1.5rem",
+                      fontSize: "0.8125rem",
+                      fontWeight: active ? 700 : 500,
+                      letterSpacing: active ? "0.06em" : "0.02em",
+                      textTransform: active ? "uppercase" : "none",
+                      border: "none",
+                      borderBottom: active ? "2px solid var(--color-signal)" : "2px solid transparent",
+                      marginBottom: "-2px",
+                      cursor: "pointer",
+                      background: "transparent",
+                      color: active ? "var(--color-signal)" : "var(--color-steel)",
+                      transition: "color 180ms, border-color 180ms, font-weight 180ms",
+                      fontFamily: "var(--font-inter), system-ui, sans-serif",
+                      whiteSpace: "nowrap",
+                      position: "relative",
+                    }}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
             </div>
           </Reveal>
 
@@ -229,10 +258,15 @@ export default function RisinajumiPage() {
             <AnimatePresence mode="popLayout">
               {filtered.map((item) => (
               <StaggerItemExit key={item.id}>
-                <div
-                  className="card-hover-bg"
+                <TiltCard
+                  intensity={6}
                   style={{
                     background: "var(--color-stone)",
+                    height: "100%",
+                  }}
+                >
+                <div
+                  style={{
                     padding: "2rem",
                     display: "flex",
                     flexDirection: "column",
@@ -338,6 +372,7 @@ export default function RisinajumiPage() {
                     Pieprasīt cenu &rarr;
                   </Link>
                 </div>
+                </TiltCard>
               </StaggerItemExit>
             ))}
             </AnimatePresence>

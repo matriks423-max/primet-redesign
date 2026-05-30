@@ -253,6 +253,26 @@ h1, h2, h3, h4, h5 {
   .desktop-spec  { display: flex; }
 }
 
+/* ─── Mobile responsive helpers ──────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .hero-grid        { grid-template-columns: 1fr !important; }
+  .contact-grid     { grid-template-columns: 1fr !important; }
+  .form-row         { grid-template-columns: 1fr !important; }
+  .section-pad      { padding-top: 3rem; padding-bottom: 3rem; }
+
+  /* Hide HMI spec panel on mobile — desktop-spec class already handles this */
+  .desktop-spec     { display: none !important; }
+
+  /* Pinned stats: reduce font size */
+  .stat-panel .stat-num { font-size: clamp(3.5rem, 18vw, 6rem) !important; }
+
+  /* Risinajumi filter tabs wrap properly */
+  .filter-tabs { flex-wrap: wrap !important; }
+
+  /* Footer grid collapses */
+  .footer-grid { grid-template-columns: 1fr !important; }
+}
+
 /* ─── Noise / film grain overlay — makes dark sections feel tactile ─────── */
 /* Applied via .noise class on any dark section */
 .noise {
@@ -269,6 +289,10 @@ h1, h2, h3, h4, h5 {
   animation: grain 8s steps(10) infinite;
 }
 .noise > * { position: relative; z-index: 2; }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 
 @keyframes grain {
   0%, 100% { transform: translate(0, 0); }

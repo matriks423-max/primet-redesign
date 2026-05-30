@@ -1,8 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { Reveal, Stagger, StaggerItem, AnimatedBar, motion, useInView } from "@/components/motion";
 import { useRef } from "react";
+import TiltCard from "@/components/TiltCard";
+
+const KineticText = dynamic(() => import("@/components/KineticText"), { ssr: false });
 
 const SERVICES = [
   {
@@ -216,6 +220,7 @@ export default function ServisaPage() {
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section
         data-section="hero"
+        className="noise"
         style={{
           background: "var(--color-navy)",
           padding: "8rem 0 5rem",
@@ -240,19 +245,36 @@ export default function ServisaPage() {
             <p className="label" style={{ marginBottom: "1.5rem", color: "var(--color-signal)" }}>
               Serviss
             </p>
-            <h1
+            <KineticText
+              text="Iekārtas strādā."
+              tag="h1"
+              delay={0.2}
+              splitBy="chars"
               style={{
                 fontSize: "clamp(2.5rem, 5vw, 4rem)",
                 fontWeight: 800,
                 color: "var(--color-white)",
                 letterSpacing: "-0.03em",
+                lineHeight: 1.0,
+                display: "block",
+                marginBottom: "0.05em",
+              }}
+            />
+            <KineticText
+              text="Pat kad nav plānots."
+              tag="h1"
+              delay={0.35}
+              splitBy="chars"
+              style={{
+                fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                fontWeight: 800,
+                color: "var(--color-signal)",
+                letterSpacing: "-0.03em",
                 lineHeight: 1.05,
-                maxWidth: "20ch",
+                display: "block",
                 marginBottom: "1.5rem",
               }}
-            >
-              Iekārtas strādā. Pat kad nav plānots.
-            </h1>
+            />
             <p
               style={{
                 fontSize: "1.125rem",
@@ -312,15 +334,21 @@ export default function ServisaPage() {
           >
             {SERVICES.map((s) => (
               <StaggerItem key={s.code}>
-                <div
+                <TiltCard
+                  intensity={5}
                   style={{
                     background: s.highlight ? "var(--color-navy)" : "var(--color-stone)",
+                    height: "100%",
+                    borderTop: s.highlight ? "3px solid var(--color-signal)" : "3px solid transparent",
+                  }}
+                >
+                <div
+                  style={{
                     padding: "2.5rem 2rem",
                     height: "100%",
                     display: "flex",
                     flexDirection: "column",
                     gap: "1.25rem",
-                    borderTop: s.highlight ? "3px solid var(--color-signal)" : "3px solid transparent",
                   }}
                 >
                   <span
@@ -379,6 +407,7 @@ export default function ServisaPage() {
                     ))}
                   </ul>
                 </div>
+                </TiltCard>
               </StaggerItem>
             ))}
           </Stagger>
@@ -523,15 +552,21 @@ export default function ServisaPage() {
           >
             {PLANS.map((p) => (
               <StaggerItem key={p.name}>
-                <div
+                <TiltCard
+                  intensity={5}
                   style={{
                     background: p.featured ? "var(--color-navy)" : "var(--color-stone)",
+                    height: "100%",
+                    borderTop: p.featured ? "3px solid var(--color-signal)" : "3px solid transparent",
+                  }}
+                >
+                <div
+                  style={{
                     padding: "2.5rem 2rem",
                     height: "100%",
                     display: "flex",
                     flexDirection: "column",
                     gap: "1.25rem",
-                    borderTop: p.featured ? "3px solid var(--color-signal)" : "3px solid transparent",
                   }}
                 >
                   <div>
@@ -606,6 +641,7 @@ export default function ServisaPage() {
                     {p.cta}
                   </Link>
                 </div>
+                </TiltCard>
               </StaggerItem>
             ))}
           </Stagger>
